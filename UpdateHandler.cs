@@ -49,9 +49,6 @@ namespace MyOtusBot
                     cancellationToken: cancellationToken);
                 // Вызываем событие завершения обработки
                 OnHandleUpdateCompleted?.Invoke(message);
-
-                //Если передана отмена
-                cancellationToken.ThrowIfCancellationRequested();
             }            
         }
     }

@@ -12,6 +12,7 @@ namespace MyOtusBot
         private static string _botToken;
         static async Task Main(string[] args)
         {
+            //получаем ключ тг-бота
             string filePath = "tg_bot_token.txt";
             if (File.Exists(filePath))
             {
@@ -38,10 +39,6 @@ namespace MyOtusBot
                 Console.WriteLine($"{me.FirstName} запущен!");
 
                 CloseBot(me, cts);
-            }
-            catch (OperationCanceledException)
-            {
-                Console.WriteLine("Бот всё, закрыт, совсем закрыт");
             }
             finally
             {
