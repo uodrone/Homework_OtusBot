@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -26,15 +27,31 @@ namespace MyOtusBot
         {
             if (update.Type == UpdateType.Message)
             {
+                string message = update.Message.Text;
                 // Вызываем событие начала обработки
-                OnHandleUpdateStarted?.Invoke(update.Message.Text);
+                OnHandleUpdateStarted?.Invoke(message);
                 Console.WriteLine("Сообщение успешно принято");
+
+                if (message == "/cat")
+                {
+                    var client = new HttpClient();
+                    var catFact = await client.GetFromJsonAsync<CatFact>("https://catfact.ninja/fact", cancellationToken);
+                    Console.WriteLine($"Занимательный факт о котах и кошках:\n{catFact?.Fact}");
+
+                    await botClient.SendTextMessageAsync(
+                    chatId: update.Message.Chat.Id,
+                    text: $"Занимательный факт о котах и кошках: {catFact.Fact}",
+                    cancellationToken: cancellationToken);
+                }
                 await botClient.SendTextMessageAsync(
                     chatId: update.Message.Chat.Id,
-                    text: update.Message.Text,
+                    text: $"Эхо: {update.Message.Text}",
                     cancellationToken: cancellationToken);
                 // Вызываем событие завершения обработки
-                OnHandleUpdateCompleted?.Invoke(update.Message.Text);
+                OnHandleUpdateCompleted?.Invoke(message);
+
+                //Если передана отмена
+                cancellationToken.ThrowIfCancellationRequested();
             }            
         }
     }

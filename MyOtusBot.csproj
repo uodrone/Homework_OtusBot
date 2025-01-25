@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="tg_bot_token.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="tg_bot_token.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Telegram.Bot" Version="22.3.0" />
   </ItemGroup>
 
